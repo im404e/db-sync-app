@@ -13,9 +13,9 @@ Config::Config(const std::string& config_file_path) : config(config_file_path) {
 }
 
 std::string Config::getDbOptionsAsString() {
-    return "dbname=" + config["dbname"].get<std::string>() +
-        " user=" + config["user"].get<std::string>() +
-        " password=" + config["password"].get<std::string>() +
-        " host=" + config["host"].get<std::string>() +
-        " port=" + config["port"].get<std::string>();
+    return "dbname=" + config.at("db").at("dbname").get<std::string>() +
+        " user=" + config.at("db").at("user").get<std::string>() +
+        " password=" + config.at("db").at("password").get<std::string>() +
+        " host=" + config.at("db").at("host").get<std::string>() +
+        " port=" + std::to_string(config.at("db").at("port").get<int>());
 }

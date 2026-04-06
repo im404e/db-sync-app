@@ -4,6 +4,7 @@
 class Config {
 private:
     nlohmann::json config;
+
 public:
     Config(const std::string& config_file_path);
     std::string getDbOptionsAsString();
