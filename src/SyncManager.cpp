@@ -61,7 +61,7 @@ void SyncManager::performSync() {
 
 void SyncManager::applySyncData(const nlohmann::json &data) {
     if (data.contains("address_soato") && data["address_soato"].is_array()) {
-        for (const auto item: data["address_soato"]) {
+        for (const auto& item: data["address_soato"]) {
             std::string code_soato = item.at("code_soato").get<std::string>();
             db.upsertAddressSoato(
                 code_soato,
@@ -78,7 +78,7 @@ void SyncManager::applySyncData(const nlohmann::json &data) {
     }
 
     if (data.contains("address_street") && data["address_street"].is_array()) {
-        for (const auto item: data["address_street"]) {
+        for (const auto& item: data["address_street"]) {
             db.upsertAddressStreet(
                 std::stoi(item.at("soato_id").get<std::string>()),
                 std::stoi(item.at("street_type_id").get<std::string>()),
@@ -91,7 +91,7 @@ void SyncManager::applySyncData(const nlohmann::json &data) {
     }
 
     if (data.contains("address") && data["address"].is_array()) {
-        for (const auto item: data["address"]) {
+        for (const auto& item: data["address"]) {
             db.upsertAddress(
                 std::stoi(item.at("soato_id").get<std::string>()),
                 std::stoi(item.at("street_id").get<std::string>()),

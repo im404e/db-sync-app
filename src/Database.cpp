@@ -62,52 +62,6 @@ nlohmann::json Database::getStreetSoatoId(const int id) const {
     }
 }
 
-/*nlohmann::json Database::addAddressSoato(std::string& soato_id, std::string& place, int place_type_id, std::string& region) {
-    try {
-        pqxx::work w(connection);
-        pqxx::result res = w.exec_params(
-            "INSERT INTO address_soato (code_soato, place, place_type_id, region, last_update) VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP);", soato_id, place, place_type_id, region);
-        w.commit();
-        return {{"output", "success"}};
-    } catch (std::exception &e) {
-        std::stringstream error;
-        error << "Database error in addAddressSoato(): " << e.what();
-        logger.log(error.str(), LogLevel::ERROR);
-        return {{"output", "error"}};
-    }
-}
-
-nlohmann::json Database::addAddressStreet(int soato_id, int street_type_id, const std::string& name){
-    try {
-        pqxx::work w(connection);
-        pqxx::result res = w.exec_params(
-          "INSERT INTO address_street (soato_id, street_type_id, name, last_update) VALUES ($1, $2, $3, CURRENT_TIMESTAMP)", soato_id,  street_type_id, name
-        );
-        w.commit();
-        return {{"output", "success"}};
-    } catch (std::exception &e) {
-        std::stringstream error;
-        error << "Database error in addAddressStreet(): " << e.what();
-        logger.log(error.str(), LogLevel::ERROR);
-    }
-}
-
-nlohmann::json Database::addAddress(int soato_id, int street_id, const std::string &house, const std::string &corps, const std::string &flat) {
-    try {
-        pqxx::work w(connection);
-        pqxx::result res = w.exec_params(
-            "INSERT INTO address (soato_id, street_id, house, corps, flat, last_update) VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)", soato_id,  street_id, house, corps, flat
-        );
-        w.commit();
-        logger.log("Address street added: " + name, LogLevel::INFO);
-        return {{"output", "success"}};
-    } catch (std::exception &e) {
-        std::stringstream error;
-        error << "Database error in addAddress(): " << e.what();
-        logger.log(error.str(), LogLevel::ERROR);
-    }
-}*/
-
 nlohmann::json Database::getDelta(const std::string& table, const std::string& since) {
     try{
         std::lock_guard<std::mutex> lock(db_mutex);
@@ -190,7 +144,8 @@ void Database::upsertAddressStreet(int soato_id, int street_type_id, const std::
     }
 }
 
-void Database::upsertAddress(int soato_id, int street_id, int house,
+void Database::upsertAddress(int soato_id, int street_id,
+    const std::string& house,
     std::optional<std::string> corps,
     std::optional<std::string> flat,
     std::optional<std::string> zip_code,

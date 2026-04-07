@@ -20,9 +20,6 @@ void Logger::log(const std::string& message, LogLevel lvl) {
         case INFO:
             output_message = "[INFO]";
             break;
-        case WARN:
-            output_message = "[WARN]";
-            break;
         case ERROR:
             output_message = "[ERROR]";
             break;

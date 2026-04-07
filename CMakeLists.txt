@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 4.1)
-project(testdbconnection)
+project(db-sync-app)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -21,7 +21,7 @@ FetchContent_Declare(cpr GIT_REPOSITORY https://github.com/libcpr/cpr.git
         GIT_TAG 1.14.1)
 FetchContent_MakeAvailable(cpr)
 
-add_executable(testdbconnection
+add_executable(db-sync-app
         src/main.cpp
         src/Config.cpp
         headers/Config.h
@@ -36,7 +36,7 @@ add_executable(testdbconnection
         headers/Utils.h
 )
 
-target_link_libraries(testdbconnection PRIVATE
+target_link_libraries(db-sync-app PRIVATE
         PostgreSQL::PostgreSQL
         PkgConfig::PQXX
         Crow::Crow

@@ -1,6 +1,5 @@
 cmake-build-debug/
 cmake-build-release/
 build/
-config.json
 config1.json
 config2.json

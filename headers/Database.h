@@ -15,14 +15,11 @@ public:
     nlohmann::json getPlaceTypesData() const;
     nlohmann::json getSoatoData() const;
     nlohmann::json getStreetSoatoId(const int id) const;
-    nlohmann::json addAddressSoato(std::string& soato_id, std::string& place, int place_type_id, std::string& region);
-    nlohmann::json addAddressStreet(int soato_id, int street_type_id, const std::string & name);
-    nlohmann::json addAddress(int soato_id, int street_id, const std::string & house, const std::string & corps, const std::string & flat);
     nlohmann::json getDelta(const std::string& table, const std::string& since);
     void upsertAddressSoato(std::string& code_soato, std::optional<std::string> area,
     std::optional<std::string> district, std::string region, int place_type_id, std::string place);
     void upsertAddressStreet(int soato_id, int street_type_id, const std::string& name);
-    void upsertAddress(int soato_id, int street_id, int house, std::optional<std::string> corps,
+    void upsertAddress(int soato_id, int street_id, const std::string& house, std::optional<std::string> corps,
         std::optional<std::string> flat, std::optional<std::string> zip_code, std::optional<std::string> note);
     static nlohmann::json resultToJson(const pqxx::result& res);
 
