@@ -137,14 +137,22 @@ void App::setup_routes(Database& db, SyncManager& sync_manager, Logger& log) {
 
 
     CROW_ROUTE(app, "/api/sync/all").methods(crow::HTTPMethod::GET)
-    ([&sync_manager](const crow::request& req) {
+    ([&sync_manager, &logger](const crow::request& req) {
+        std::stringstream message;
+        message << "Request for get delta all.";
+        logger.log(message.str(), LogLevel::WARN);
+
         auto since = req.url_params.get("since");
         std::string time = since ? since : "1970-01-01 00:00:00";
         return sync_manager.getDelta(time).dump();
     });
 
     CROW_ROUTE(app, "/api/sync/start").methods(crow::HTTPMethod::GET)
-    ([&sync_manager]() {
+    ([&sync_manager, &logger]() {
+        std::stringstream message;
+        message << "Request for sync start.";
+        logger.log(message.str(), LogLevel::WARN);
+
         sync_manager.performSync();
 
         return crow::response(200, "Sync process started");
