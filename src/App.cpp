@@ -30,28 +30,34 @@ void App::setup_routes(Database& db, SyncManager& sync_manager, Logger& log) {
             nlohmann::json json = nlohmann::json::parse(req.body);
 
             std::string code_soato = json.at("code_soato").get<std::string>();
-            std::optional<std::string> area = json.contains("area") ? std::make_optional(json.at("area").get<std::string>()) : std::nullopt;
-            std::optional<std::string> district = json.contains("district") ? std::make_optional(json.at("district").get<std::string>()) : std::nullopt;
+            std::optional<std::string> area;
+            if (json.contains("area") && !json["area"].is_null()) {
+                area = json.at("area").get<std::string>();
+            } else {
+                area = std::nullopt;
+            }
+            std::optional<std::string> district;
+            if (json.contains("district") && !json["district"].is_null()) {
+                district = json.at("district").get<std::string>();
+            } else {
+                district = std::nullopt;
+            }
             std::string region = json.at("region").get<std::string>();
             int place_type_id = json.at("place_type").get<int>();
             std::string place = json.at("place").get<std::string>();
 
-            db.upsertAddressSoato(code_soato, area, district, region, place_type_id, place);
-
             std::stringstream message;
-            message << "Success upsert in address_soato:\n\tcode_soato" << code_soato
-            << "\n\t area: " << area.value_or(" ")
-            << "\n\t district: " << district.value_or(" ")
-            << "\n\t region: " << region
-            << "\n\t place: " << place_type_id
-            << "\n\t place: " << place;
-            logger.log(message.str(), LogLevel::INFO);
+            message << "Request for upsert in address_soato.";
+            logger.log(message.str(), LogLevel::WARN);
+
+            db.upsertAddressSoato(code_soato, area, district, region, place_type_id, place);
 
             return crow::response(200, "OK");
         } catch (std::exception& e) {
             std::stringstream error;
             error << "Error occurred while trying to upsert row in address_soato table." << e.what();
             logger.log(error.str(), LogLevel::ERROR);
+
             return crow::response(500, e.what());;
         }
     });
@@ -65,19 +71,18 @@ void App::setup_routes(Database& db, SyncManager& sync_manager, Logger& log) {
             int street_type_id = json.at("street_type_id").get<int>();
             std::string name = json.at("name").get<std::string>();
 
-            db.upsertAddressStreet(soato_id, street_type_id, name);
-
             std::stringstream message;
-            message << "Success upsert in address_street:\n\tsoato_id" << soato_id
-            << "\n\tstreet_type_id: " << street_type_id
-            << "\n\tname: " << name;
-            logger.log(message.str(), LogLevel::INFO);
+            message << "Request for upsert in address_street.";
+            logger.log(message.str(), LogLevel::WARN);
+
+            db.upsertAddressStreet(soato_id, street_type_id, name);
 
             return crow::response(200, "OK");
         } catch (std::exception& e) {
             std::stringstream error;
             error << "Error occurred while trying to upsert row in address_street table." << e.what();
             logger.log(error.str(), LogLevel::ERROR);
+
             return crow::response(500, e.what());;
         }
     });
@@ -89,28 +94,43 @@ void App::setup_routes(Database& db, SyncManager& sync_manager, Logger& log) {
             int soato_id = json.at("soato_id").get<int>();
             int street_id = json.at("street_id").get<int>();
             std::string house = json.at("house").get<std::string>();
-            std::optional<std::string> corps = json.contains("corps") ? std::make_optional(json.at("corps").get<std::string>()) : std::nullopt;
-            std::optional<std::string> flat = json.contains("flat") ? std::make_optional(json.at("flat").get<std::string>()) : std::nullopt;
-            std::optional<std::string> zip_code = json.contains("zip_code") ? std::make_optional(json.at("zip_code").get<std::string>()) : std::nullopt;
-            std::optional<std::string> note = json.contains("note") ? std::make_optional(json.at("note").get<std::string>()) : std::nullopt;
-
-            db.upsertAddress(soato_id, street_id, house, corps, flat, zip_code, note);
+            std::optional<std::string> corps;
+            if (json.contains("corps") && !json["corps"].is_null()) {
+                corps = json.at("corps").get<std::string>();
+            } else {
+                corps = std::nullopt;
+            }
+            std::optional<std::string> flat;
+            if (json.contains("flat") && !json["flat"].is_null()) {
+                flat = json.at("flat").get<std::string>();
+            } else {
+                flat = std::nullopt;
+            }
+            std::optional<std::string> zip_code;
+            if (json.contains("zip_code") && !json["zip_code"].is_null()) {
+                zip_code = json.at("zip_code").get<std::string>();
+            } else {
+                zip_code = std::nullopt;
+            }
+            std::optional<std::string> note;
+            if (json.contains("note") && !json["note"].is_null()) {
+                note = json.at("note").get<std::string>();
+            } else {
+                note = std::nullopt;
+            }
 
             std::stringstream message;
-            message << "Success upsert in address_street:\n\tsoato_id" << soato_id
-            << "\n\tstreet_id: " << street_id
-            << "\n\thouse: " << house
-            << "\n\tcorps: " << corps.value_or(" ")
-            << "\n\t flat: " << flat.value_or(" ")
-            << "\n\t zip_code: " << zip_code.value_or(" ")
-            << "\n\tnote: " << note.value_or(" ");
-            logger.log(message.str(), LogLevel::INFO);
+            message << "Request for upsert in address.";
+            logger.log(message.str(), LogLevel::WARN);
+
+            db.upsertAddress(soato_id, street_id, house, corps, flat, zip_code, note);
 
             return crow::response(200, "OK");
         } catch (std::exception& e) {
             std::stringstream error;
             error << "Error occurred while trying to upsert row in address table." << e.what();
             logger.log(error.str(), LogLevel::ERROR);
+
             return crow::response(500, e.what());;
         }
     });
@@ -126,6 +146,7 @@ void App::setup_routes(Database& db, SyncManager& sync_manager, Logger& log) {
     CROW_ROUTE(app, "/api/sync/start").methods(crow::HTTPMethod::GET)
     ([&sync_manager]() {
         sync_manager.performSync();
+
         return crow::response(200, "Sync process started");
     });
 }
