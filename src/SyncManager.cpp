@@ -95,7 +95,7 @@ void SyncManager::applySyncData(const nlohmann::json &data) {
             db.upsertAddress(
                 std::stoi(item.at("soato_id").get<std::string>()),
                 std::stoi(item.at("street_id").get<std::string>()),
-                std::stoi(item.at("house").get<std::string>()),
+                item.at("house").get<std::string>(),
                 item.value("corps", std::string{""}),
                 item.value("flat", std::string{""}),
                 item.value("zip_code", std::string{""}),
