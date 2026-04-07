@@ -1,0 +1,13 @@
+{
+  "db": {
+    "dbname": "your_db",
+    "user": "user",
+    "password": "password",
+    "host": "localhost",
+    "port": 5432
+  },
+  "server":{
+    "port": 18080,
+    "remote_url": "http://remote-server-ip:18081"
+  }
+}
