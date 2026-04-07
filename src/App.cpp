@@ -144,6 +144,7 @@ void App::setup_routes(Database& db, SyncManager& sync_manager, Logger& log) {
 
         auto since = req.url_params.get("since");
         std::string time = since ? since : "1970-01-01 00:00:00";
+
         return sync_manager.getDelta(time).dump();
     });
 
